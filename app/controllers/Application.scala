@@ -42,7 +42,8 @@ class Application extends Controller {
       "name" -> nonEmptyText,
       "color" -> nonEmptyText,
       "breed" -> nonEmptyText,
-      "gender" -> boolean)(Cat.apply)(Cat.unapply))
+      "gender" -> nonEmptyText
+      )(Cat.apply)(Cat.unapply))
 
   // -- Actions
 

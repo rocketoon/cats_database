@@ -10,7 +10,7 @@ CREATE TABLE cat (
   color varchar(255),
   picture blob,
   breed varchar(255),
-  gender boolean,
+  gender varchar(1),
   
   constraint pc_cat primary key (id)
 );

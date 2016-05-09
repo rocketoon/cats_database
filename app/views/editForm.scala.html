@@ -15,8 +15,13 @@
             @inputText(catForm("name"), '_label -> "Cat name", '_help -> "")
             @inputText(catForm("color"), '_label -> "Color", '_help -> "")
 			@inputText(catForm("breed"), '_label -> "Breed", '_help -> "")
-            @inputText(catForm("gender"), '_label -> "Gender", '_help -> "")
-            @inputFile(catForm("picture"), '_label -> "Picture", '_help -> "")
+         	
+         	@select(
+  				 catForm("gender"),
+  				 options("f" ->"Female","m" ->"Male"),
+   				'_label -> "Gender", '_default -> "-- Select gender --"
+			)            
+			@inputFile(catForm("picture"), '_label -> "Picture", '_help -> "")
             
         </fieldset>
         

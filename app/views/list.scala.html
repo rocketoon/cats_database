@@ -68,7 +68,12 @@
                                 @cat.breed
                             </td>
                             <td>
-                                @cat.gender
+                                @{ cat.gender match {
+									  case "f" => "Female"
+									  case "m" => "Male"
+									  case _ => "Unknown"
+									}
+								  }
                             </td>                           
                         </tr>
                     }

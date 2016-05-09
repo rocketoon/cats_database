@@ -14,7 +14,7 @@ import java.io.File
 import java.io.FileInputStream
 import play.api.libs.Files.TemporaryFile
 
-case class Cat(id: Option[Long] = None, name: String, color: String, breed: String, gender: Boolean)
+case class Cat(id: Option[Long] = None, name: String, color: String, breed: String, gender: String)
 
 /**
  * Helper for pagination.
@@ -36,7 +36,7 @@ object Cat {
       get[String]("cat.name") ~
       get[String]("cat.color") ~
       get[String]("cat.breed") ~
-      get[Boolean]("cat.gender") map {
+      get[String]("cat.gender") map {
         case id ~ name ~ color ~ breed ~ gender => Cat(id, name, color, breed, gender)
       }
   }
