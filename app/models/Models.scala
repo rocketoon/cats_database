@@ -98,31 +98,49 @@ object Cat {
    * @param cat The cat values.
    */
   def update(id: Long, cat: Cat, pic: Option[TemporaryFile]) = {
-    val istr: InputStream = pic.map(f => new FileInputStream(f.file)).getOrElse(null)
-    
+
     DB.withConnection { implicit connection =>
-      SQL(
-        """
-          update cat
-          set name = {name}, color= {color}, picture= {picture}, breed = {breed}, gender = {gender}
-          where id = {id}
-        """).on(
-          'id -> id,
-          'name -> cat.name,
-          'color -> cat.color,
-          'picture -> istr,
-          'breed -> cat.breed,
-          'gender -> cat.gender).executeUpdate()
+      pic match {
+        case Some(f) =>
+          val istr: InputStream = new FileInputStream(f.file)
+
+          SQL(
+            """
+                update cat
+                set name = {name}, color= {color}, picture= {picture}, breed = {breed}, gender = {gender}
+                where id = {id}
+            """).on(
+              'id -> id,
+              'name -> cat.name,
+              'color -> cat.color,
+              'picture -> istr,
+              'breed -> cat.breed,
+              'gender -> cat.gender).executeUpdate()
+
+        case None =>
+
+          SQL(
+            """
+                update cat
+                set name = {name}, color= {color}, breed = {breed}, gender = {gender}
+                where id = {id}
+            """).on(
+              'id -> id,
+              'name -> cat.name,
+              'color -> cat.color,
+              'breed -> cat.breed,
+              'gender -> cat.gender).executeUpdate()
+
+      }
     }
   }
 
-  
   /**
    * Get cat image from database
    *
    * @param id The cat id
    */
-  
+
   def getImage(id: Long) = {
 
     DB.withConnection { implicit connection =>
@@ -132,7 +150,7 @@ object Cat {
          """).on(
           'id -> id).map {
             case Row(picture: Array[Byte]) => picture
-      }
+          }
       res.as(scalar[Array[Byte]].singleOpt)
     }
 
@@ -147,7 +165,7 @@ object Cat {
   def insert(cat: Cat, pic: Option[TemporaryFile]) = {
 
     val istr: InputStream = pic.map(f => new FileInputStream(f.file)).getOrElse(null)
-    
+
     DB.withConnection { implicit connection =>
       SQL(
         """
