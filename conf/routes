@@ -1,0 +1,25 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Default path will just redirect to the cats list
+GET     /                           controllers.Application.index
+
+# Cats list (look at the default values for pagination parameters)
+GET     /cats                  controllers.Application.list(p:Int ?= 0, s:Int ?= 2, f ?= "")
+
+# Add cat
+GET     /cats/new              controllers.Application.create
+POST    /cats                  controllers.Application.save
+
+# Edit existing cat
+GET     /cats/:id              controllers.Application.edit(id:Long)
+POST    /cats/:id              controllers.Application.update(id:Long)
+GET		/cats/:id/image		   controllers.Application.catImage(id:Long)
+
+# Delete a cat
+POST    /cats/:id/delete       controllers.Application.delete(id:Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
