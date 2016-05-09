@@ -26,7 +26,7 @@ class ModelSpec extends Specification {
     "be updated if needed" in {
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
-        Cat.update(3, Cat(name = "The Kitto", color = "green", breed = "haskY", gender = "m"))
+        Cat.update(3, Cat(name = "The Kitto", color = "green", breed = "haskY", gender = "m"), None)
 
         val Some(kitto) = Cat.findById(3)
 
