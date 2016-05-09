@@ -58,8 +58,8 @@
                     case (cat) => {
                         <tr>
                             <td><a href="@routes.Application.edit(cat.id.get)">@cat.name</a></td>
-                            <td>
-                               <img src="@routes.Application.catImage(cat.id.getOrElse(0))" /> 
+                            <td>                          
+                               <img src="@routes.Application.catImage(cat.id.getOrElse(0))" class="img-thumbnail"/> 
                             </td>
                             <td>
                                 @cat.color
