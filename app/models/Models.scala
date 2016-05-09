@@ -14,6 +14,8 @@ import java.io.File
 import java.io.FileInputStream
 import play.api.libs.Files.TemporaryFile
 
+
+
 case class Cat(id: Option[Long] = None, name: String, color: String, breed: String, gender: String)
 
 /**
@@ -62,21 +64,20 @@ object Cat {
    */
   def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Cat)] = {
 
-    val offest = pageSize * page
-
+    val offset = pageSize * page
     DB.withConnection { implicit connection =>
 
       val cats = SQL(
         """
-          select * from cat 
+          select id, name, color, breed, gender from cat 
           where cat.name like {filter}
-          order by {orderBy} nulls last
+          order by %d %s nulls last
           limit {pageSize} offset {offset}
-        """).on(
+        """.format(math.abs(orderBy), if(orderBy < 0) "DESC" else "ASC")).on(
           'pageSize -> pageSize,
-          'offset -> offest,
-          'filter -> filter,
-          'orderBy -> orderBy).as(Cat.simple.*)
+          'offset -> offset,
+          'filter -> filter
+           ).as(Cat.simple *)
 
       val totalRows = SQL(
         """
@@ -85,7 +86,7 @@ object Cat {
         """).on(
           'filter -> filter).as(scalar[Long].single)
 
-      Page(cats, page, offest, totalRows)
+      Page(cats, page, offset, totalRows)
 
     }
 
@@ -169,8 +170,7 @@ object Cat {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into cat values (
-            (select next value for cat_seq), 
+          insert into cat(name,color,picture,breed,gender) values (
             {name}, {color}, {picture}, {breed}, {gender}        
           )
         """).on(
