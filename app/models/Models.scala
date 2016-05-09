@@ -97,17 +97,20 @@ object Cat {
    * @param id The cat id
    * @param cat The cat values.
    */
-  def update(id: Long, cat: Cat) = {
+  def update(id: Long, cat: Cat, pic: Option[TemporaryFile]) = {
+    val istr: InputStream = pic.map(f => new FileInputStream(f.file)).getOrElse(null)
+    
     DB.withConnection { implicit connection =>
       SQL(
         """
           update cat
-          set name = {name}, color= {color}, breed = {breed}, gender = {gender}
+          set name = {name}, color= {color}, picture= {picture}, breed = {breed}, gender = {gender}
           where id = {id}
         """).on(
           'id -> id,
           'name -> cat.name,
           'color -> cat.color,
+          'picture -> istr,
           'breed -> cat.breed,
           'gender -> cat.gender).executeUpdate()
     }
@@ -143,7 +146,7 @@ object Cat {
    */
   def insert(cat: Cat, pic: Option[TemporaryFile]) = {
 
-    val is: InputStream = pic.map(f => new FileInputStream(f.file)).getOrElse(null)
+    val istr: InputStream = pic.map(f => new FileInputStream(f.file)).getOrElse(null)
     
     DB.withConnection { implicit connection =>
       SQL(
@@ -155,7 +158,7 @@ object Cat {
         """).on(
           'name -> cat.name,
           'color -> cat.color,
-          'picture -> is,
+          'picture -> istr,
           'breed -> cat.breed,
           'gender -> cat.gender).executeUpdate()
     }

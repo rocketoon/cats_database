@@ -81,11 +81,19 @@ class Application extends Controller {
    *
    * @param id Id of the cat to edit
    */
-  def update(id: Long) = Action { implicit request =>
+  def update(id: Long) = Action(parse.multipartFormData) { implicit request =>
     catForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.editForm(id, formWithErrors)),
       cat => {
-        Cat.update(id, cat)
+        
+        val picture = request.body.file("picture").map { picture =>
+          import java.io.File
+          val filename = picture.filename
+          val contentType = picture.contentType
+          picture.ref
+        }
+        
+        Cat.update(id, cat, picture)
         Home.flashing("success" -> "Cat %s has been updated".format(cat.name))
       })
   }
@@ -128,19 +136,6 @@ class Application extends Controller {
     Cat.getImage(id).map { img => Ok(img) }.getOrElse(NotFound)
   }
   
-  
-  def uploadFile = Action(parse.multipartFormData) { implicit request =>
-    request.body.file("picture").map { picture =>
-      import java.io.File
-      val filename = picture.filename
-      val contentType = picture.contentType
-      picture.ref.moveTo(new File(s"/tmp/$filename"))
-      Ok("File uploaded")
-    }.getOrElse {
-      Redirect(routes.Application.index).flashing(
-        "error" -> "Missing file")
-    }
-  }
 
   /**
    * Handle cat deletion.
