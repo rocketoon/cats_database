@@ -21,15 +21,40 @@
         </fieldset>
         
         <div class="actions">
-            <input type="submit" value="Save cat information" class="btn primary"> or 
+            <input id="submit" type="submit" value="Save cat information" class="btn primary"> or 
             <a href="@routes.Application.list()" class="btn">Cancel</a> 
         </div>
         
     }
-    
-    @form(routes.Application.delete(id), 'class -> "topRight") {
-        <input type="submit" value="Delete cat information" class="btn danger" onclick="return confirm('Are you sure?');">
-    }
+
+   <button id="deleteCat" class="btn danger topRight"
+	data-toggle="modal" data-target="#deleteConfirm">
+	Delete cat information
+   </button>
+
+	<!-- Modal -->
+	<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Confirm</h4>
+				</div>
+				<div class="modal-body">Are you sure you want to delete cat @catForm("name").value.getOrElse("") information</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Cancel</button>
+					@form(routes.Application.delete(id)) { <input id="confDeleteCat"
+						type="submit" value="Delete cat information" class="btn primary"/>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
     
     
 }
+

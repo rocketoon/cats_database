@@ -18,33 +18,28 @@ class IntegrationSpec extends Specification {
         
         browser.$("header h1").first.getText must equalTo("Cats database")
         browser.$("section h1").first.getText must equalTo("15 cats found")
-        
+      
         browser.$("#pagination li.current").first.getText must equalTo("Displaying 1 to 10 of 15")
-        
         browser.$("#pagination li.next a").click()
-        
         browser.$("#pagination li.current").first.getText must equalTo("Displaying 11 to 15 of 15")
+        
         browser.$("#searchbox").text("Bob")
         browser.$("#searchsubmit").click()
-        
         browser.$("section h1").first.getText must equalTo("4 cats found")
-               
-        browser.$("#discontinued").text("")
-        browser.$("input.primary").click()
-        
-        browser.$("section h1").first.getText must equalTo("15 cats found")
+        browser.$("a", withText("Bob")).first().click()       
+        browser.$("section h1").first.getText must equalTo("Edit cat information")
+        browser.$("#submit").click()   
         browser.$(".alert-message").first.getText must equalTo("Done! Cat Bob has been updated")
-        
-        browser.$("#searchbox").text("Bob")
-        browser.$("#searchsubmit").click()
-       
+
         browser.$("section h1").first.getText must equalTo("15 cats found")
-        browser.$(".alert-message").first.getText must equalTo("Done! Cat informaiotn has been deleted")
         
-        browser.$("#searchbox").text("Bob")
-        browser.$("#searchsubmit").click()
+        browser.$("a", withText("Guffy")).click() 
+        browser.$("#deleteCat").click()
+        browser.$("#confDeleteCat").click()
+        browser.$(".alert-message").first.getText must equalTo("Done! Cat information has been deleted")
+       
+        browser.$("section h1").first.getText must equalTo("14 cats found")
         
-        browser.$("section h1").first.getText must equalTo("4 cats found")
 
       }
     }

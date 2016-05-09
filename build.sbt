@@ -11,7 +11,7 @@ libraryDependencies ++= Seq(
   evolutions,
   specs2 % Test,
   "com.typesafe.play" %% "anorm" % "2.4.0",
-  "org.webjars" % "jquery" % "2.1.4",
+  "org.webjars" % "jquery" % "1.12.3",
   "org.webjars" % "bootstrap" % "3.3.5"
 )     
 
