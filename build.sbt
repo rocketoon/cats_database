@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   specs2 % Test,
   "com.typesafe.play" %% "anorm" % "2.4.0",
   "org.webjars" % "jquery" % "1.12.3",
-  "org.webjars" % "bootstrap" % "3.3.5"
+  "org.webjars" % "bootstrap" % "3.3.5",
+  "org.postgresql" % "postgresql" % "9.4.1208"
 )     
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
